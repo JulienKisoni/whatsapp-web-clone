@@ -1,1 +1,1 @@
-# Boilerplate for [Meteor](https://www.meteor.com) with Typescript
+# Boilerplate for Clone WhatsApp with React, [Meteor](https://www.meteor.com) and Typescript
