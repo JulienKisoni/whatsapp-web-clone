@@ -7,6 +7,7 @@ const Header = (props:any):JSX.Element => {
     const {icons, iconClass} = props;
     const renderIcons = ():JSX.Element[] => {
         return icons.map((icon:string, i:number)=> {
+            console.log('name', icon);
             return (
                 <FontAwesome 
                     key={i}
@@ -19,6 +20,7 @@ const Header = (props:any):JSX.Element => {
 
     return (
         <StyledHeader>
+            {props.children}
             <div className={props.iconsWidthSmall ? "icons--left small" : "icons--left"}>
                 {renderIcons()}
             </div>
