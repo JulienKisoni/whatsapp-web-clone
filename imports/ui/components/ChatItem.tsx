@@ -6,6 +6,7 @@ import Avatar from './Avatar';
 const ChatItem = (props:any):JSX.Element => {
     const { title, picture, lastMessage } = props;
     const { content, createdAt } = lastMessage;
+    console.log('createdAt', createdAt);
     return (
         <StyledChatItem>
             <Avatar large avatar_url={picture} />
@@ -15,7 +16,7 @@ const ChatItem = (props:any):JSX.Element => {
                         {title}
                     </span>
                     <div className="content--line1__date">
-                        {createdAt}
+                        
                     </div>
                 </div>
                 <div className="content--line1">
