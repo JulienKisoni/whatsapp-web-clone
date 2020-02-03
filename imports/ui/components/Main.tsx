@@ -11,7 +11,7 @@ import { findChats } from '../../api/helpers';
 const Main = (props:any):JSX.Element => {
     Tracker.autorun(()=> {
         Meteor.subscribe('chats.mine');
-        console.log('chats', findChats());
+        // console.log('chats', findChats());
     })
     return (
         <StyledMain>

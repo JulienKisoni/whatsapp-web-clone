@@ -11,7 +11,7 @@ Meteor.startup(() => {
         if(userReady) {
             ReactDOM.render(<App />, document.getElementById('root'));
         } else {
-            console.log('user not ready');
+            // console.log('user not ready');
         }
     });
 });
