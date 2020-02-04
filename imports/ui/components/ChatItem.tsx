@@ -6,7 +6,7 @@ import StyledChatItem from '../elements/StyledChatItem';
 import Avatar from './Avatar';
 
 const ChatItem = (props:any):JSX.Element => {
-    const { title, picture, lastMessage } = props;
+    const { title, picture, lastMessage, onChatClick, _id, active } = props;
     const { content, createdAt } = lastMessage;
     const now:string = moment().format("D/MM/Y");
     const today:boolean = now === moment(createdAt).format("D/MM/Y");
@@ -16,7 +16,7 @@ const ChatItem = (props:any):JSX.Element => {
     // console.log('createdAt', createdAt);
     // console.log('createdAt formated', moment(createdAt).format("D/MM/Y"));
     return (
-        <StyledChatItem>
+        <StyledChatItem active={active} onClick={()=> onChatClick(_id)}>
             <Avatar large avatar_url={picture} />
             <div className="chat--contentContainer">
                 <div className="content--line1">
