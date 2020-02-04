@@ -12,6 +12,7 @@ import { findChats } from '../../api/helpers';
 const Main = (props:any):JSX.Element => {
     Tracker.autorun(()=> {
         Meteor.subscribe('chats.mine');
+        Meteor.subscribe('messages.all');
         // console.log('chats', findChats());
     });
 
