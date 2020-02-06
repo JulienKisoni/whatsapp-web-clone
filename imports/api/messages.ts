@@ -9,6 +9,11 @@ export const MessagesCollection = new Mongo.Collection('Messages');
 if(Meteor.isServer) {
     Meteor.publish('messages.all', function() {
         return MessagesCollection.find();
+    });
+    Meteor.methods({
+      "message.insert": function(message) {
+        return MessagesCollection.insert(message);
+      }
     })
 }
 
