@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import _ from 'lodash';
 import moment from 'moment';
+import FlipMove from 'react-flip-move';
 
 import StyledMessageBox from '../elements/StyledMessageBox';
 import Day from './Day';
@@ -9,9 +10,10 @@ import MessageText from './MessageText';
 
 let isEven:boolean = false;
 const format:string = "D MMMM Y";
+let messagesEnd:HTMLDivElement;
 
 const MessageBox = (props:any):JSX.Element => {
-    const {messages} = props;
+    const {selectedChat, messages} = props;
     // messages est un tableau
     messages.forEach(message => {
         if(!message.senderId) {
@@ -48,16 +50,24 @@ const MessageBox = (props:any):JSX.Element => {
                     msgClass={msgClass}
                     content={message.content}
                     ownership={message.ownership}
+                    createdAt={message.createdAt}
                 />
             )
         })
     }
+    const scrollToBottom = ():void => {
+        messagesEnd.scrollIntoView({behavior: "smooth"});
+    }
+    React.useEffect(()=> {
+        scrollToBottom();
+    }, [selectedChat, messages])
+
     const renderDays = ():JSX.Element[] => {
         return newMessages.map((newMessage, index:number) => {
             const dateText:string = newMessage.today ? "Aujourd'hui" : newMessage.date;
             return (
                 <div key={index}>
-                    <Day date={newMessage.date} />
+                    <Day date={dateText} />
                     {renderMessages(newMessage)}
                 </div>
             )
@@ -65,7 +75,12 @@ const MessageBox = (props:any):JSX.Element => {
     }
     return (
         <StyledMessageBox>
-            {renderDays()}
+            <FlipMove>
+                {renderDays()}
+            </FlipMove>
+            <div
+                ref={(el:HTMLDivElement)=> messagesEnd = el}
+            />
         </StyledMessageBox>
     )
 }

@@ -17,6 +17,8 @@ const Footer = (props:any):JSX.Element => {
             return;
         }
         props.onSend(inputValue);
+        setInputValue("");
+        setIconName("microphone");
     }
     return (
         <StyledFooter>

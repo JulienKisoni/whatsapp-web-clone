@@ -1,7 +1,7 @@
 import React from 'react';
-import { Tracker } from 'meteor/tracker';
 import moment from 'moment';
 import { Meteor } from 'meteor/meteor';
+import { withTracker } from 'meteor/react-meteor-data';
 
 import StyledMessageView from '../elements/StyledMessageView';
 import Header from './Header';
@@ -15,10 +15,6 @@ const icons:string[] = ["search", "paperclip", "ellipsis-v"];
 
 const MessageView = (props:any):JSX.Element => {
     const selectedChat:Chat = props.selectedChat;
-    let messages:Message[];
-    Tracker.autorun(()=> {
-        messages = MessagesCollection.find({chatId: selectedChat._id}).fetch();
-    });
     const handleSend = (content:string):void => {
         const message:Message = {
             chatId: selectedChat._id,
@@ -45,10 +41,15 @@ const MessageView = (props:any):JSX.Element => {
                     <span className="headerMsg--sbTitle">en ligne</span>
                 </div>
             </Header>
-            <MessageBox messages={messages} />
+            <MessageBox selectedChat={selectedChat} messages={props.messages} />
             <Footer onSend={handleSend} />
         </StyledMessageView>
     )
 }
 
-export default MessageView;
+export default withTracker(({selectedChat})=> {
+
+    return {
+        messages: MessagesCollection.find({chatId: selectedChat._id}).fetch()
+    }
+})(MessageView);
