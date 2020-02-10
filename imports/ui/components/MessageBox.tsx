@@ -7,13 +7,15 @@ import FlipMove from 'react-flip-move';
 import StyledMessageBox from '../elements/StyledMessageBox';
 import Day from './Day';
 import MessageText from './MessageText';
+import FABs from './FABs';
 
 let isEven:boolean = false;
 const format:string = "D MMMM Y";
 let messagesEnd:HTMLDivElement;
 
 const MessageBox = (props:any):JSX.Element => {
-    const {selectedChat, messages} = props;
+    const {selectedChat, messages, fabVisible, 
+        onFABItemClick, onInputChange} = props;
     // messages est un tableau
     messages.forEach(message => {
         if(!message.senderId) {
@@ -75,6 +77,11 @@ const MessageBox = (props:any):JSX.Element => {
     }
     return (
         <StyledMessageBox>
+            <FABs 
+                onFABItemClick={onFABItemClick}
+                onInputChange={onInputChange} 
+                fabVisible={fabVisible}
+            />
             <FlipMove>
                 {renderDays()}
             </FlipMove>
