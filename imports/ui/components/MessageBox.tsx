@@ -8,6 +8,7 @@ import StyledMessageBox from '../elements/StyledMessageBox';
 import Day from './Day';
 import MessageText from './MessageText';
 import FABs from './FABs';
+import MessageImage from './MessageImage';
 
 let isEven:boolean = false;
 const format:string = "D MMMM Y";
@@ -44,8 +45,20 @@ const MessageBox = (props:any):JSX.Element => {
                                 });
     // console.log('newMessages', newMessages);
     const renderMessages = (newMessage:any):JSX.Element[] => {
+        // console.log('messages', newMessage.groupedMessages);
         return newMessage.groupedMessages.map(message => {
             const msgClass:string = `message message--${message.ownership}`;
+            if(message.type === "image") {
+                const mine:boolean = message.ownership === "mine";
+                return (
+                    <MessageImage 
+                        key={message._id}
+                        content={message.content}
+                        createdAt={message.createdAt}
+                        mine={mine}
+                    />
+                )
+            }
             return (
                 <MessageText 
                     key={message._id}

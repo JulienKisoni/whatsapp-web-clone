@@ -13,6 +13,13 @@ if(Meteor.isServer) {
     Meteor.methods({
       "message.insert": function(message) {
         return MessagesCollection.insert(message);
+      },
+      "message.update": function(_id:string, content:string) {
+        return MessagesCollection.update({ _id }, {
+          $set: {
+            content
+          }
+        })
       }
     })
 }

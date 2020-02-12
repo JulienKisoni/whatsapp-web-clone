@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Tracker } from 'meteor/tracker';
+import { Session } from 'meteor/session';
 
 import StyledMessageView from '../elements/StyledMessageView';
 import Header from './Header';
@@ -11,6 +13,7 @@ import MessageBox from './MessageBox';
 import Modal from './Modal';
 import { Chat, Message, MessageType } from '../../api/models';
 import { MessagesCollection } from '../../api/messages';
+import { uploadFile } from '../../api/helpers';
 
 let fileInput:any;
 
@@ -59,22 +62,38 @@ const MessageView = (props:any):JSX.Element => {
         setModalVisible(false);
         setFabVisible(false);
     }
-    const handleSend = (content:string):void => {
+    const handleSend = (content:string, type:MessageType):void => {
         const message:Message = {
             chatId: selectedChat._id,
             content,
             createdAt: moment().toDate(),
             senderId: Meteor.userId(),
-            type: MessageType.TEXT,
+            type,
             read: false
         }
-        Meteor.call('message.insert', message, (err, res)=> {
+        if(modalVisible) {
+            handleClose();
+        }
+        Meteor.call('message.insert', message, (err, id)=> {
             if(err) {
                 console.log('err insert msg', err);
             } else {
-                console.log('res', res);
+                console.log('res', id);
+                uploadFile(fileInput);
+                Tracker.autorun(() => {
+                    const imageUrl:string = Session.get('wwc__imageUrl');
+                    if(imageUrl && message.type === "image") {
+                        Meteor.call('message.update', id, imageUrl, (err, res)=> {
+                            if(err) {
+                                console.log('err', err);
+                            } else {
+                                console.log('ok', res);
+                            }
+                        });
+                    }
+                });
             }
-        })
+        });
     }
     return (
         <StyledMessageView>
@@ -89,6 +108,7 @@ const MessageView = (props:any):JSX.Element => {
                 <Modal 
                     selectedImage={selectedImage} 
                     onClose={handleClose} 
+                    onUpload={handleSend}
                 />
             ) : (
                 <React.Fragment>
