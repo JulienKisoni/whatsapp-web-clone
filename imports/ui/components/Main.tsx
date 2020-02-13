@@ -8,6 +8,7 @@ import Right from './Right';
 import StyledMain from '../elements/StyledMain';
 import { Chat } from '../../api/models';
 import { findChats } from '../../api/helpers';
+import OtherProfile from './OtherProfile';
 
 const Main = (props:any):JSX.Element => {
     // const [loading, setLoading] = React.useState<boolean>(true);
@@ -22,6 +23,7 @@ const Main = (props:any):JSX.Element => {
 
     const [messageVisible, setMessageVisible] = React.useState<boolean>(false);
     const [selectedChat, setSelectedChat] = React.useState<Chat>({});
+    const [OP, setOP] = React.useState<any>({});
 
     const handleChatClick = (_id:string):void => {
         // console.log('selected chat before', selectedChat);
@@ -32,21 +34,42 @@ const Main = (props:any):JSX.Element => {
         // console.log('selected chat after', newChat);
         setSelectedChat(newChat);
     }
+    const handleAvatarClick = (otherId:string):void => {
+        setOP({
+            visible: true,
+            otherId
+        });
+    }
+    const handleClose = ():void => {
+        setOP({
+            visible: false,
+            otherId: ""
+        })
+    }
 
     return (
         <StyledMain>
             {!props.loading ? (
                 <React.Fragment>
                     <Left 
+                        OPVisible={OP.visible}
                         chats={props.chats} 
                         onChatClick={handleChatClick} 
                         selectedChat={selectedChat}
                     />
                     <Right 
+                        OPVisible={OP.visible}
                         right 
                         messageVisible={messageVisible} 
                         selectedChat={selectedChat}
+                        onAvatarClick={handleAvatarClick}
                     />
+                    {OP.visible ? (
+                        <OtherProfile 
+                            onClose={handleClose}
+                            otherUserId={OP.otherId} 
+                        />
+                    ) : null}
                 </React.Fragment>
             ) : null}
         </StyledMain>

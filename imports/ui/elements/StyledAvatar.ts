@@ -17,6 +17,11 @@ const StyledAvatar = styled.div`
         height: 4.9rem;
         border-radius: 2.45rem;
     `}
+    ${props => props.big && css`
+        width: 20rem;
+        height: 20rem;
+        border-radius: 50%;
+    `}
 
     .avatar--img {
         width: 100%;

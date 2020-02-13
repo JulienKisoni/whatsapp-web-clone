@@ -13,7 +13,7 @@ import MessageBox from './MessageBox';
 import Modal from './Modal';
 import { Chat, Message, MessageType } from '../../api/models';
 import { MessagesCollection } from '../../api/messages';
-import { uploadFile } from '../../api/helpers';
+import { uploadFile, findOtherId } from '../../api/helpers';
 
 let fileInput:any;
 
@@ -95,10 +95,17 @@ const MessageView = (props:any):JSX.Element => {
             }
         });
     }
+    const avatarClick = ():void => {
+        const otherId:string = findOtherId(selectedChat.participants);
+        props.onAvatarClick(otherId);
+    }
     return (
         <StyledMessageView>
-            <Header iconClass="greyIcon" icons={icons}>
-                <Avatar avatar_url={selectedChat.picture} />
+            <Header OPVisible={props.OPVisible} iconClass="greyIcon" icons={icons}>
+                <Avatar 
+                    avatar_url={selectedChat.picture} 
+                    onAvatarClick={avatarClick} 
+                />
                 <div className="headerMsg--container">
                     <span className="headerMsg--title">{selectedChat.title}</span>
                     <span className="headerMsg--sbTitle">en ligne</span>
