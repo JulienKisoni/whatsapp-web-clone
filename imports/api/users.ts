@@ -127,5 +127,8 @@ Meteor.methods({
                 }
             });
         }
+    },
+    'user.username': function(_id:string, username:string) {
+        Accounts.setUsername(_id, username);
     }
 })
