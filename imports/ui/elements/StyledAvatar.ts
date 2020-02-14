@@ -27,6 +27,27 @@ const StyledAvatar = styled.div`
         width: 100%;
         height: 100%;
     }
+    .avatar--overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+        font-size: 2.4rem;
+    }
+    .overlay--icon {
+        margin-bottom: 1.3rem;
+    }
+    .overlay--text {
+        font-size: 1.4rem;
+    }
+    input[type=file] {
+        display: none;
+    }
 `
 
 export default StyledAvatar;

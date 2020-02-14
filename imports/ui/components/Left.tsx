@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { withTracker } from 'meteor/react-meteor-data';
 
 import StyledLeft from '../elements/StyledLeft';
 import Header from './Header';
@@ -27,7 +28,7 @@ const icons:any[] = [
 ];
 
 const Left = (props:any):JSX.Element => {
-    const { chats, onChatClick, selectedChat, OPVisible } = props;
+    const { chats, onChatClick, selectedChat, OPVisible, picture } = props;
     const [LSVisible, setLSVisible] = React.useState<boolean>(false);
 
     const renderLSComponents = ():JSX.Element => {
@@ -35,7 +36,7 @@ const Left = (props:any):JSX.Element => {
             <>
                 <LSHeader onLSClose={toggleLS}/>
                 <div className="LS--avatar">
-                    <Avatar big avatar_url={Meteor.user().profile.picture} />
+                    <Avatar inLS big avatar_url={picture} />
                 </div>
                 <LSForm type="username" />
                 <div className="LS--desc">
@@ -59,7 +60,7 @@ const Left = (props:any):JSX.Element => {
                     <Header icons={icons} iconClass="greyIcon">
                         <Avatar 
                             onAvatarClick={toggleLS}
-                            avatar_url={Meteor.user().profile.picture}
+                            avatar_url={picture}
                         />
                     </Header>
                     <Status />
@@ -79,4 +80,8 @@ const Left = (props:any):JSX.Element => {
     )
 }
 
-export default Left;
+export default withTracker(() => {
+    return {
+        picture: Meteor.user().profile.picture
+    }
+})(Left);

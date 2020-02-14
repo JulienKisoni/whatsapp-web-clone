@@ -8,23 +8,29 @@ const LSForm = (props:any):JSX.Element => {
     const { type } = props;
     const [editable, setEditable] = React.useState<boolean>(false);
     const title:string = type === "actu" ? "Actu" : "Votre nom";
-    const value:string = type === "actu" ? Meteor.user().profile.actue : Meteor.user().username;
+    const value:string = type === "actu" ? Meteor.user().profile.actu : Meteor.user().username;
+    const [state, setState] = React.useState<string>(value);
 
     const toggleEditable = ():void => {
-        setEditable(!editable);
+        if(!editable) {
+            setEditable(true)
+        } else {
+            if(type === "actu") {
+                Meteor.users.update({_id: Meteor.userId()}, {
+                    $set: {
+                        "profile.actu": state
+                    }
+                });
+            } else {
+                Meteor.call('user.username', Meteor.userId(), state);
+            }
+            setEditable(false);
+        }
     }
 
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>):void => {
         const newValue:string = e.target.value;
-        if(type === "actu") {
-            Meteor.users.update({_id: Meteor.userId()}, {
-                $set: {
-                    "profile.actu": newValue
-                }
-            });
-        } else {
-            Meteor.call('user.username', Meteor.userId(), newValue);
-        }
+        setState(newValue);
     }
     return (
         <StyledLSForm>
@@ -36,8 +42,7 @@ const LSForm = (props:any):JSX.Element => {
                     <input 
                         readOnly={true}
                         className="LSForm--input __border"
-                        value={value}
-                        onChange={handleChange}
+                        value={state}
                     />
                     <FontAwesome 
                         className="LSForm--icon"
@@ -50,7 +55,7 @@ const LSForm = (props:any):JSX.Element => {
                     <input 
                         readOnly={false}
                         className="LSForm--input __border"
-                        value={value}
+                        value={state}
                         onChange={handleChange}
                     />
                     <FontAwesome 
