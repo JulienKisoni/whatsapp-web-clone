@@ -52,7 +52,7 @@ const Main = (props:any):JSX.Element => {
     const handleUIClick = (otherUserId:string):void => {
         const chat:Chat = ChatsCollection.findOne({
             participants: {
-                $in: [otherUserId, Meteor.userId()]
+                $all: [otherUserId, Meteor.userId()]
             }
         });
         console.log('chat', chat);
@@ -68,7 +68,7 @@ const Main = (props:any):JSX.Element => {
                     createdAt: moment().toDate(),
                     type: MessageType.TEXT
                 }
-            }))
+            }));
         }
     }
 
