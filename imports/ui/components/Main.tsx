@@ -2,13 +2,15 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import _ from 'lodash';
+import moment from 'moment';
 
 import Left from './Left';
 import Right from './Right';
 import StyledMain from '../elements/StyledMain';
-import { Chat } from '../../api/models';
+import { Chat, MessageType } from '../../api/models';
 import { findChats } from '../../api/helpers';
 import OtherProfile from './OtherProfile';
+import { ChatsCollection } from '../../api/chats';
 
 const Main = (props:any):JSX.Element => {
     // const [loading, setLoading] = React.useState<boolean>(true);
@@ -47,6 +49,29 @@ const Main = (props:any):JSX.Element => {
         })
     }
 
+    const handleUIClick = (otherUserId:string):void => {
+        const chat:Chat = ChatsCollection.findOne({
+            participants: {
+                $in: [otherUserId, Meteor.userId()]
+            }
+        });
+        console.log('chat', chat);
+        if(chat) {
+            handleChatClick(chat._id);
+        } else {
+            handleChatClick(ChatsCollection.insert({
+                title: "",
+                picture: "",
+                participants: [otherUserId, Meteor.userId()],
+                lastMessage: {
+                    content: "",
+                    createdAt: moment().toDate(),
+                    type: MessageType.TEXT
+                }
+            }))
+        }
+    }
+
     return (
         <StyledMain>
             {!props.loading ? (
@@ -56,6 +81,7 @@ const Main = (props:any):JSX.Element => {
                         chats={props.chats} 
                         onChatClick={handleChatClick} 
                         selectedChat={selectedChat}
+                        onUserItemClick={handleUIClick}
                     />
                     <Right 
                         OPVisible={OP.visible}

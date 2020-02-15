@@ -11,30 +11,46 @@ import ChatList from './ChatList';
 import LeftSide from './LeftSide';
 import LSHeader from './LSHeader';
 import LSForm from './LSForm';
+import UsersList from './UsersList';
 
-const icons:any[] = [
-    {
-        name: "circle-notch",
-        func: ()=> {}
-    },
-    {
-        name: "comment-alt",
-        func: ()=> {}
-    },
-    {
-        name: "ellipsis-v",
-        func: ()=> {}
-    }
-];
 
 const Left = (props:any):JSX.Element => {
+    const icons:any[] = [
+        {
+            name: "circle-notch",
+            func: ()=> {}
+        },
+        {
+            name: "comment-alt",
+            func: ()=> {showUList()}
+        },
+        {
+            name: "ellipsis-v",
+            func: ()=> {}
+        }
+    ];
     const { chats, onChatClick, selectedChat, OPVisible, picture } = props;
     const [LSVisible, setLSVisible] = React.useState<boolean>(false);
+    const [UListVisible, setUListVisible] = React.useState<boolean>(false);
+
+    const showUList = ():void => {
+        setLSVisible(true);
+        setUListVisible(true);
+    }
 
     const renderLSComponents = ():JSX.Element => {
+        if(UListVisible) {
+            return (
+                <>
+                    <LSHeader title="Nouvelle Discussion" onLSClose={toggleLS} />
+                    <Searchbar placeholder="Chercher Contact" />
+                    <UsersList onUserItemClick={props.onUserItemClick} />
+                </>
+            )
+        }
         return (
             <>
-                <LSHeader onLSClose={toggleLS}/>
+                <LSHeader title="Profil" onLSClose={toggleLS}/>
                 <div className="LS--avatar">
                     <Avatar inLS big avatar_url={picture} />
                 </div>
@@ -51,6 +67,7 @@ const Left = (props:any):JSX.Element => {
             setLSVisible(true);
         } else {
             setLSVisible(false);
+            setUListVisible(false);
         }
     }
     return (
@@ -64,7 +81,7 @@ const Left = (props:any):JSX.Element => {
                         />
                     </Header>
                     <Status />
-                    <Searchbar />
+                    <Searchbar placeholder="Rechercher ou Démarrer une discussion" />
                     <ChatList 
                         chats={chats} 
                         onChatClick={onChatClick} 
