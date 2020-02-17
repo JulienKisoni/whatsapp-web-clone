@@ -6,11 +6,20 @@ import moment from 'moment';
 
 import Left from './Left';
 import Right from './Right';
+import BigOverlay from './BigOverlay';
+import ImageViewer from './ImageViewer';
 import StyledMain from '../elements/StyledMain';
 import { Chat, MessageType } from '../../api/models';
 import { findChats } from '../../api/helpers';
 import OtherProfile from './OtherProfile';
 import { ChatsCollection } from '../../api/chats';
+
+const initialBigOverlay:any = {
+    image: {
+        visible: false,
+        url: ""
+    }
+}
 
 const Main = (props:any):JSX.Element => {
     // const [loading, setLoading] = React.useState<boolean>(true);
@@ -26,6 +35,7 @@ const Main = (props:any):JSX.Element => {
     const [messageVisible, setMessageVisible] = React.useState<boolean>(false);
     const [selectedChat, setSelectedChat] = React.useState<Chat>({});
     const [OP, setOP] = React.useState<any>({});
+    const [BOVisible, setBOVisible] = React.useState<any>(initialBigOverlay);
 
     const handleChatClick = (_id:string):void => {
         // console.log('selected chat before', selectedChat);
@@ -77,6 +87,28 @@ const Main = (props:any):JSX.Element => {
             handleChatClick(chatId);
         }
     }
+    const showImage = (imageUrl:string):void => {
+        setBOVisible(prevState => {
+            return {
+                ...prevState,
+                image: {
+                    visible: true,
+                    url: imageUrl
+                }
+            }
+        });
+    }
+    const handleCloseBO = ():void => {
+        setBOVisible(prevState => {
+            return {
+                ...prevState,
+                image: {
+                    visible: false,
+                    url: ""
+                }
+            }
+        });
+    }
 
     return (
         <StyledMain>
@@ -96,10 +128,19 @@ const Main = (props:any):JSX.Element => {
                         selectedChat={selectedChat}
                         onAvatarClick={handleAvatarClick}
                     />
+                    {BOVisible.image.visible ? (
+                        <BigOverlay>
+                            <ImageViewer 
+                                imageUrl={BOVisible.image.url}
+                                onClose={handleCloseBO}
+                            />
+                        </BigOverlay>
+                    ) : null}
                     {OP.visible ? (
                         <OtherProfile 
                             onClose={handleClose}
                             otherUserId={OP.otherId} 
+                            onShowImage={showImage}
                         />
                     ) : null}
                 </React.Fragment>
