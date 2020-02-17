@@ -5,12 +5,23 @@ import FontAwesome from 'react-fontawesome';
 
 import StyledChatItem from '../elements/StyledChatItem';
 import Avatar from './Avatar';
+import { getBadges, updateBadges } from '../../api/helpers';
 
 const ChatItem = (props:any):JSX.Element => {
-    const { title, picture, lastMessage, onChatClick, _id, active } = props;
+    const { title, picture, lastMessage, 
+        onChatClick, _id, active, participants } = props;
     const { content, createdAt, type } = lastMessage;
     const now:string = moment().format("D/MM/Y");
     const today:boolean = now === moment(createdAt).format("D/MM/Y");
+    let badge:number = getBadges(_id);
+    console.log('badge', badge);
+
+    React.useEffect(() => {
+        if(active) {
+            updateBadges(participants, _id);
+            badge = getBadges(_id);
+        }
+    }, [lastMessage]);
     // console.log('today', today);
 
     // console.log('now', now);
@@ -50,7 +61,9 @@ const ChatItem = (props:any):JSX.Element => {
                             Photo
                         </span>
                     )}
-                    <div className="chat--badge">4</div>
+                    {badge > 0 ? (
+                        <div className="chat--badge">{badge}</div>
+                    ) : null}
                 </div>
             </div>
         </StyledChatItem>

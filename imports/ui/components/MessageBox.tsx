@@ -9,6 +9,7 @@ import Day from './Day';
 import MessageText from './MessageText';
 import FABs from './FABs';
 import MessageImage from './MessageImage';
+import { updateBadges } from '../../api/helpers';
 
 let isEven:boolean = false;
 const format:string = "D MMMM Y";
@@ -75,7 +76,8 @@ const MessageBox = (props:any):JSX.Element => {
     }
     React.useEffect(()=> {
         scrollToBottom();
-    }, [selectedChat, messages])
+        updateBadges(selectedChat.participants, selectedChat._id);
+    }, [selectedChat, messages]);
 
     const renderDays = ():JSX.Element[] => {
         return newMessages.map((newMessage, index:number) => {

@@ -36,7 +36,7 @@ const MessageImage = (props:any):JSX.Element => {
                         src={content}
                     />
                     <div className="image--overlay">
-                        <div className="detailsContainer__date">
+                        <div className="detailsContainer __date">
                             <div className="image--date">
                                 <Moment format="HH:mm">
                                     {createdAt}
