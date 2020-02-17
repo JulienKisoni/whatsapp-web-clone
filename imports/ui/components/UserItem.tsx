@@ -6,7 +6,7 @@ import Avatar from './Avatar';
 const UserItem = (props:any):JSX.Element => {
     const { picture, username, actu, id, onUserItemClick } = props;
     return (
-        <StyledUserItem onClick={() => onUserItemClick(id)}>
+        <StyledUserItem onClick={() => onUserItemClick(id,username,picture)}>
             <Avatar large avatar_url={picture} />
             <div className="chat--contentContainer">
                 <div className="content--line1">

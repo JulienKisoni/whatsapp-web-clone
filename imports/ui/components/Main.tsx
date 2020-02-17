@@ -34,7 +34,12 @@ const Main = (props:any):JSX.Element => {
         }
         const newChat:Chat = _.find(props.chats, {_id});
         // console.log('selected chat after', newChat);
-        setSelectedChat(newChat);
+        if(newChat) {
+            setSelectedChat(newChat);
+        } else {
+            const newChat:Chat = ChatsCollection.findOne(_id);
+            setSelectedChat(newChat);
+        }
     }
     const handleAvatarClick = (otherId:string):void => {
         setOP({
@@ -49,7 +54,7 @@ const Main = (props:any):JSX.Element => {
         })
     }
 
-    const handleUIClick = (otherUserId:string):void => {
+    const handleUIClick = (otherUserId:string, username:string, picture:string):void => {
         const chat:Chat = ChatsCollection.findOne({
             participants: {
                 $all: [otherUserId, Meteor.userId()]
@@ -59,16 +64,17 @@ const Main = (props:any):JSX.Element => {
         if(chat) {
             handleChatClick(chat._id);
         } else {
-            handleChatClick(ChatsCollection.insert({
-                title: "",
-                picture: "",
+            const chatId:string = ChatsCollection.insert({
+                title: username,
+                picture,
                 participants: [otherUserId, Meteor.userId()],
                 lastMessage: {
                     content: "",
                     createdAt: moment().toDate(),
                     type: MessageType.TEXT
                 }
-            }));
+            });
+            handleChatClick(chatId);
         }
     }
 

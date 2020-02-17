@@ -65,7 +65,7 @@ const findLastMessage = (chatId:string):Message => {
     const Msg:Message[] = MessagesCollection.find({ chatId }, {
         sort: { createdAt: -1 }
     }).fetch();
-    if(!Msg) {
+    if(!Msg[0]) {
         return ChatsCollection.findOne(chatId).lastMessage;
     }
     return Msg[0];

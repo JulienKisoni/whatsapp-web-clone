@@ -38,13 +38,17 @@ const Left = (props:any):JSX.Element => {
         setUListVisible(true);
     }
 
+    const userItemClick = (_id:string, username:string, picture:string):void => {
+        toggleLS();
+        props.onUserItemClick(_id, username, picture);
+    }
     const renderLSComponents = ():JSX.Element => {
         if(UListVisible) {
             return (
                 <>
                     <LSHeader title="Nouvelle Discussion" onLSClose={toggleLS} />
                     <Searchbar placeholder="Chercher Contact" />
-                    <UsersList onUserItemClick={props.onUserItemClick} />
+                    <UsersList onUserItemClick={userItemClick} />
                 </>
             )
         }
