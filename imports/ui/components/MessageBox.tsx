@@ -57,12 +57,15 @@ const MessageBox = (props:any):JSX.Element => {
                         content={message.content}
                         createdAt={message.createdAt}
                         mine={mine}
+                        onImgClick={() => props.onMsgTxtClick(message._id, "image")}
                     />
                 )
             }
             return (
                 <MessageText 
+                    onClick={props.onMsgTxtClick}
                     key={message._id}
+                    id={message._id}
                     msgClass={msgClass}
                     content={message.content}
                     ownership={message.ownership}

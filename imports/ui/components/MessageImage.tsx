@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import StyledMessageImage from '../elements/StyledMessageImage';
 
 const MessageImage = (props:any):JSX.Element => {
-    const { mine, content, createdAt } = props;
+    const { mine, content, createdAt, onImgClick } = props;
 
     const renderImage = ():JSX.Element => {
         if(!mine) {
@@ -34,8 +34,9 @@ const MessageImage = (props:any):JSX.Element => {
                         className="image"
                         alt="img"
                         src={content}
+                        onClick={onImgClick}
                     />
-                    <div className="image--overlay">
+                    <div  className="image--overlay">
                         <div className="detailsContainer __date">
                             <div className="image--date">
                                 <Moment format="HH:mm">
